@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">MoviesListTest</string>
+    <string name="app_name">Movies List Test</string>
+    <string name="label_category">CATEGORY</string>
+    <string name="label_popular">Popular</string>
+    <string name="label_upcoming">Upcoming</string>
+    <string name="label_top_rated">Top Rated</string>
+    <string name="label_now_playing">Now Playing</string>
+    <string name="label_title">Title</string>
+    <string name="label_release_date">Release Date</string>
+    <string name="label_loremipsum">Lorem Ipsum</string>
+    <string name="label_overview">Overview</string>
+    <string name="label_reviews">Reviews</string>
+    <string name="label_author">Author</string>
+    <string name="label_review">Review</string>
+    <string name="label_favorit">Favorit</string>
+    <string name="label_tidak_ada_review">Tidak ada Review</string>
 </resources>
