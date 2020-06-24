@@ -51,25 +51,37 @@ class DetailMovieActivity : AppCompatActivity() {
 
     private fun getDetail(){
         detailViewModel.getDetailMovie(movieId, API_KEY).observe(this, Observer {
-            val result = it
-            supportActionBar!!.title = it.title
-            Glide.with(this).load(AppConfig.BASE_URL_IMAGE+it.posterPath).into(img_poster)
-            tv_title.text = it.title
-            tv_release_date.text = it.releaseDate
-            tv_summary.text = it.overview
+            if(it!=null) {
+                val result = it
+                supportActionBar!!.title = it.title
+                Glide.with(this).load(AppConfig.BASE_URL_IMAGE + it.posterPath).into(img_poster)
+                tv_title.text = it.title
+                tv_release_date.text = it.releaseDate
+                tv_summary.text = it.overview
 
-            img_btn_unfav.setOnClickListener {
-                detailViewModel.saveFavorit(FavoritTable(result.id, result.title, result.releaseDate, result.overview, result.posterPath)).observe(this, Observer {
-                    img_btn_fav.visibility = VISIBLE
-                    img_btn_unfav.visibility = GONE
-                })
-            }
+                img_btn_unfav.setOnClickListener {
+                    detailViewModel.saveFavorit(
+                        FavoritTable(
+                            result.id,
+                            result.title,
+                            result.releaseDate,
+                            result.overview,
+                            result.posterPath
+                        )
+                    ).observe(this, Observer {
+                        img_btn_fav.visibility = VISIBLE
+                        img_btn_unfav.visibility = GONE
+                    })
+                }
 
-            img_btn_fav.setOnClickListener {
-                detailViewModel.deleteFavorit(result.id).observe(this, Observer {
-                    img_btn_fav.visibility = GONE
-                    img_btn_unfav.visibility = VISIBLE
-                })
+                img_btn_fav.setOnClickListener {
+                    detailViewModel.deleteFavorit(result.id).observe(this, Observer {
+                        img_btn_fav.visibility = GONE
+                        img_btn_unfav.visibility = VISIBLE
+                    })
+                }
+            }else{
+                onBackPressed()
             }
         })
     }
@@ -78,10 +90,12 @@ class DetailMovieActivity : AppCompatActivity() {
         showProgressBar()
         detailViewModel.getListReviews(movieId, API_KEY).observe(this, Observer {
             hideProgressBar()
-            if(it.size == 0)
-                tv_label_review.text = getString(R.string.label_tidak_ada_review)
-            else
-                rv_review.adapter = ReviewsAdapter(this, it)
+            if(it!=null) {
+                if (it.size == 0)
+                    tv_label_review.text = getString(R.string.label_tidak_ada_review)
+                else
+                    rv_review.adapter = ReviewsAdapter(this, it)
+            }
         })
     }
 

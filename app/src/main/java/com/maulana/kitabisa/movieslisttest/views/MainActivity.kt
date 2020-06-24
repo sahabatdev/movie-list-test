@@ -75,16 +75,17 @@ class MainActivity : AppCompatActivity() {
         showProgressBar()
         mainViewModel.getMovies(category, AppConfig.API_KEY).observe(this, Observer {
             hideProgressBar()
-            rv_movies.adapter = MoviesAdapter(this, it)
+            if(it!=null)
+                rv_movies.adapter = MoviesAdapter(this, it)
         })
     }
 
-    private fun showProgressBar(){
+    fun showProgressBar(){
         pbar_movies.visibility = VISIBLE
         rv_movies.visibility = GONE
     }
 
-    private fun hideProgressBar(){
+    fun hideProgressBar(){
         pbar_movies.visibility = GONE
         rv_movies.visibility = VISIBLE
 

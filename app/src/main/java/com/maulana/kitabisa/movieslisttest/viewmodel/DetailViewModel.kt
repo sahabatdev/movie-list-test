@@ -1,6 +1,7 @@
 package com.maulana.kitabisa.movieslisttest.viewmodel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
@@ -9,6 +10,7 @@ import com.maulana.kitabisa.movieslisttest.model.ResultReview
 import com.maulana.kitabisa.movieslisttest.model.Results
 import com.maulana.kitabisa.movieslisttest.repository.ApiRepository
 import com.maulana.kitabisa.movieslisttest.repository.RoomRepository
+import java.lang.Exception
 
 /**
  * @author Maulana Rahmatullah
@@ -17,17 +19,40 @@ import com.maulana.kitabisa.movieslisttest.repository.RoomRepository
 class DetailViewModel(application: Application) : AndroidViewModel(application) {
     private val apiRepository = ApiRepository()
     private val roomRepository = RoomRepository(application)
+    private val context = application.applicationContext
 
-    fun getDetailMovie(movieId: Int, apiKey: String) : LiveData<Results> = liveData {
-        val movieDetail = apiRepository.getDetailMovie(movieId, apiKey)
-        if(movieDetail.isSuccessful)
-            emit(movieDetail.body()!!)
+    private fun showMessage(message: String){
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
-    fun getListReviews(movieId: Int, apiKey: String) : LiveData<MutableList<ResultReview>> = liveData {
-        val reviewsList = apiRepository.showListReviews(movieId, apiKey)
-        if(reviewsList.isSuccessful)
-            emit(reviewsList.body()!!.results)
+    fun getDetailMovie(movieId: Int, apiKey: String) : LiveData<Results?> = liveData {
+        try {
+            val movieDetail = apiRepository.getDetailMovie(movieId, apiKey)
+            if (movieDetail.isSuccessful)
+                emit(movieDetail.body()!!)
+            else {
+                emit(null)
+                showMessage(movieDetail.errorBody()!!.string())
+            }
+        }catch (e: Exception){
+            emit(null)
+            showMessage(e.message!!)
+        }
+    }
+
+    fun getListReviews(movieId: Int, apiKey: String) : LiveData<MutableList<ResultReview>?> = liveData {
+        try{
+            val reviewsList = apiRepository.showListReviews(movieId, apiKey)
+            if(reviewsList.isSuccessful)
+                emit(reviewsList.body()!!.results)
+            else {
+                emit(null)
+                showMessage(reviewsList.errorBody()!!.string())
+            }
+        }catch (e: Exception){
+            emit(null)
+            showMessage(e.message!!)
+        }
     }
 
     fun saveFavorit(fav: FavoritTable) : LiveData<Unit> = liveData {

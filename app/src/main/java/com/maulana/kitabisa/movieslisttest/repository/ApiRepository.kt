@@ -1,8 +1,12 @@
 package com.maulana.kitabisa.movieslisttest.repository
 
+import com.maulana.kitabisa.movieslisttest.model.MoviesResponse
 import com.maulana.kitabisa.movieslisttest.network.ApiRetrofit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * @author Maulana Rahmatullah
